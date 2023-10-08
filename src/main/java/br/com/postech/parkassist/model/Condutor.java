@@ -21,7 +21,7 @@ public class Condutor extends PanacheMongoEntity {
 
     public Condutor(String nome,UUID uuid, String CNH, String senha, String endereco, TipoPagamento tipoPagamento, List<Veiculo> veiculos) {
         this.nome = nome;
-        this.uuid = UUID.randomUUID(); // gera um UUID aleatório
+        this.uuid = uuid;
         this.CNH = CNH;
         this.senha = senha;
         this.endereco = endereco;

@@ -1,5 +1,7 @@
 package br.com.postech.parkassist.controller;
 
+import br.com.postech.parkassist.controller.request.TempoFixoRequest;
+import br.com.postech.parkassist.controller.request.TempoVariavelRequest;
 import br.com.postech.parkassist.model.Estacionamento;
 import br.com.postech.parkassist.service.EstacionamentoService;
 import jakarta.inject.Inject;
@@ -9,7 +11,6 @@ import jakarta.ws.rs.core.Response;
 import org.bson.types.ObjectId;
 
 import java.util.List;
-import java.util.UUID;
 
 @Path("/estacionamento")
 public class EstacionamentoController {
@@ -24,22 +25,18 @@ public class EstacionamentoController {
     }
 
     @POST
-    @Path("/tempofixo/{idCondutor}/{tempo}")
-    //@Consumes(MediaType.APPLICATION_JSON)
-    public Response createTempoFixo(@PathParam("idCondutor") String idCondutor, @PathParam("tempo") Integer tempo) {
-        System.out.println("teste");
-        ObjectId id = new ObjectId(idCondutor);
-//        UUID id = new UUID(idContudor);
-        estacionamentoService.iniciarTempoFixo(id, tempo);
+    @Path("/tempofixo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createTempoFixo(TempoFixoRequest tempoFixoRequest) {
+        estacionamentoService.iniciarTempoFixo(tempoFixoRequest);
         return Response.ok().build();
     }
 
     @POST
-    @Path("/tempovariavel/{idCondutor}")
+    @Path("/tempovariavel")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createTempoVariavel(@PathParam("idCondutor") String idCondutor) {
-        ObjectId id = new ObjectId(idCondutor);
-        estacionamentoService.iniciarTempoVariavel(id);
+    public Response createTempoVariavel(TempoVariavelRequest request) {
+        estacionamentoService.iniciarTempoVariavel(request);
         return Response.ok().build();
     }
 
@@ -47,8 +44,7 @@ public class EstacionamentoController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Estacionamento estacionamento) {
-        estacionamento.setId(new ObjectId(id));
-        estacionamento.update();
+        estacionamentoService.update(id, estacionamento);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 

@@ -1,18 +1,18 @@
 package br.com.postech.parkassist.model;
 
+import io.quarkus.mongodb.panache.PanacheMongoEntity;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Recibo {
-    private UUID id;    // n° recibo
-    private UUID idCondutor;
+    private UUID reciboPagamento;    // n° recibo
     private LocalDateTime emissao;
     private TipoPagamento tipoPagamento;
     private Double valor;
 
-    public Recibo(UUID id, UUID idCondutor, LocalDateTime emissao, TipoPagamento tipoPagamento, Double valor) {
-        this.id = id;
-        this.idCondutor = idCondutor;
+    public Recibo(UUID reciboPagamento, LocalDateTime emissao, TipoPagamento tipoPagamento, Double valor) {
+        this.reciboPagamento = reciboPagamento;
         this.emissao = emissao;
         this.tipoPagamento = tipoPagamento;
         this.valor = valor;
@@ -20,20 +20,12 @@ public class Recibo {
 
     public Recibo() {}
 
-    public UUID getId() {
-        return id;
+    public UUID getReciboPagamento() {
+        return reciboPagamento;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getIdCondutor() {
-        return idCondutor;
-    }
-
-    public void setIdCondutor(UUID idCondutor) {
-        this.idCondutor = idCondutor;
+    public void setReciboPagamento(UUID reciboPagamento) {
+        this.reciboPagamento = reciboPagamento;
     }
 
     public LocalDateTime getEmissao() {

@@ -10,6 +10,7 @@ import java.util.UUID;
 public class Estacionamento extends PanacheMongoEntity {
     private UUID UUID;
     private ObjectId idCondutor;
+    private String placa;
     private TipoCobranca tipoCobranca;
     private Integer tempoFixo;
     private LocalDateTime tempoDeInicio;
@@ -17,9 +18,10 @@ public class Estacionamento extends PanacheMongoEntity {
     private Recibo recibo;
 
 
-    public Estacionamento(UUID UUID, ObjectId idCondutor, TipoCobranca tipoCobranca, Integer tempoFixo, LocalDateTime tempoDeInicio, LocalDateTime tempoDeFim, Recibo recibo) {
+    public Estacionamento(UUID UUID, ObjectId idCondutor, String placa, TipoCobranca tipoCobranca, Integer tempoFixo, LocalDateTime tempoDeInicio, LocalDateTime tempoDeFim, Recibo recibo) {
         this.UUID = UUID;
         this.idCondutor = idCondutor;
+        this.placa = placa;
         this.tipoCobranca = tipoCobranca;
         this.tempoFixo = tempoFixo;
         this.tempoDeInicio = tempoDeInicio;
@@ -88,4 +90,6 @@ public class Estacionamento extends PanacheMongoEntity {
     public void setRecibo(Recibo recibo) {
         this.recibo = recibo;
     }
+
+
 }
