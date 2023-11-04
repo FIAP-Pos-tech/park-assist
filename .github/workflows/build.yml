@@ -22,11 +22,8 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: permission
-        run: chmod +x mvnw 
-
       - name: Build with Maven
-        run: ./mvnw clean package -DskipTests
+        run: chmod +x mvnw && ./mvnw clean package -DskipTests
 
       - name: docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/parkassist .
