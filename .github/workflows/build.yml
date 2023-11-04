@@ -22,6 +22,9 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: permission
+        run: chmod +x mvnw 
+
       - name: Build with Maven
         run: ./mvnw clean package -DskipTests
 
