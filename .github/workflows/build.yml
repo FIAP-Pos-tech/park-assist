@@ -26,5 +26,5 @@ jobs:
         run: chmod +x mvnw && ./mvnw clean package -DskipTests
 
       - name: docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/parkassist .
+        run: docker build -t parkassist .
 
