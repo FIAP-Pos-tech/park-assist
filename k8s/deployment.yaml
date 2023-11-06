@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: park-assist
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: park-assist
+  template:
+    metadata:
+      labels:
+        app: park-assist
+    spec:
+      containers:
+        - name: park-assist
+          image: AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/park-assist:GITSHA
+          ports:
+            - containerPort: 8080
