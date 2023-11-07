@@ -9,3 +9,9 @@ variable "pk_cluster_name" {
 variable "pk_cluster_version" {
     default = "1.28"
 }
+
+variable "pk_vpc_cidr" {
+  description = "CIDR block for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}

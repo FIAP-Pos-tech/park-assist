@@ -1,7 +1,14 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: staging
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: park-assist
+  namespace: staging
   annotations:
     eks.amazonaws.com/fargate-profile: eks-fargate-profile
 spec:
@@ -16,6 +23,14 @@ spec:
     spec:
       containers:
         - name: park-assist
-          image: AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/park-assist:GITSHA
+#          image: AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/park-assist:GITSHA
+          image: 585707473057.dkr.ecr.us-east-1.amazonaws.com/park-assist:24654f7bb61fab43b1b95333a12b85e4d1dcddb9
           ports:
             - containerPort: 8080
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
