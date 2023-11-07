@@ -1,5 +1,5 @@
 resource "aws_vpc" "pk_vpc" {
-    cidr_block = "10.0.0.0/16"
+    cidr_block = var.pk_vpc_cidr
     
     enable_dns_support = true
     enable_dns_hostnames = true
