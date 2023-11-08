@@ -20,7 +20,7 @@ resource "aws_iam_role_policy_attachment" "eks-fargate-profile" {
 
 resource "aws_eks_fargate_profile" "kube_system" {
     cluster_name           = aws_eks_cluster.cluster.name
-    fargate_profile_name   = "kube-system"
+    fargate_profile_name   = var.nm_kube_system
     pod_execution_role_arn = aws_iam_role.eks-fargate-profile.arn
  
     subnet_ids = [
@@ -29,7 +29,7 @@ resource "aws_eks_fargate_profile" "kube_system" {
     ]
     
     selector {
-      namespace = "kube-system"
+      namespace = var.nm_kube_system
     }
 }
 
