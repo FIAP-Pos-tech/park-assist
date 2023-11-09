@@ -22,7 +22,7 @@ spec:
       containers:
         - name: park-assist
 #          image: AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/park-assist:GITSHA
-          image: gcr.io/bright-gearbox-404600/parkassist:latest
+          image: gcr.io/GCP_PROJECT_ID/parkassist:GITSHA
           ports:
             - containerPort: 8080
           resources:
