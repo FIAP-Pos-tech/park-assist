@@ -8,6 +8,7 @@ import java.util.Set;
 import org.bson.types.ObjectId;
 import br.com.postech.parkassist.controller.request.CondutorRequest;
 import br.com.postech.parkassist.controller.request.VeiculoRequest;
+import br.com.postech.parkassist.controller.response.CondutorResponse;
 import br.com.postech.parkassist.customexception.CustomException;
 import br.com.postech.parkassist.model.Condutor;
 import br.com.postech.parkassist.model.Veiculo;
@@ -120,20 +121,21 @@ public class CondutorService {
 		condutor.update();
 	}
 
-	public Condutor buscaContudorID(String id) throws CustomException {
-		Condutor condutor = buscaPorId(id);
+	public CondutorResponse buscaContudorID(String id) throws CustomException {
+		return new CondutorResponse(buscaPorId(id));
+	}
+
+	public List<CondutorResponse> listaDeCondutores() {
+		List<Condutor> lista = Condutor.listAll();
+		return lista.stream().map(CondutorResponse::new).toList();
+	}
+
+	public Condutor buscaPorId(String id) {
+		Condutor condutor = Condutor.findById(new ObjectId(id));
 		if (condutor == null) {
 			throw new CustomException("Busca por ID não concluída, Condutor não encontrado");
 		}
 		return condutor;
-	}
-
-	public List<Condutor> listaDeCondutores() {
-		return Condutor.listAll();
-	}
-
-	public Condutor buscaPorId(String id) {
-		return Condutor.findById(new ObjectId(id));
 	}
 
 	public boolean deletarPorID(String id) {

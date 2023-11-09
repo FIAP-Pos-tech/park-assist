@@ -36,6 +36,10 @@ public class Condutor extends PanacheMongoEntity {
 
     public Condutor() {}
 
+    public ObjectId getId() {
+        return id;
+    }
+
     public void setId(ObjectId id) {
         this.id = id;
     }

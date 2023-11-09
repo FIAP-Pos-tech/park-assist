@@ -2,6 +2,7 @@ package br.com.postech.parkassist.controller;
 
 import br.com.postech.parkassist.controller.request.CondutorRequest;
 import br.com.postech.parkassist.controller.request.VeiculoRequest;
+import br.com.postech.parkassist.controller.response.CondutorResponse;
 import br.com.postech.parkassist.customexception.CustomException;
 import br.com.postech.parkassist.model.Condutor;
 import br.com.postech.parkassist.service.CondutorService;
@@ -22,7 +23,7 @@ public class CondutorController{
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Condutor> listAllCondutor() {
+	public List<CondutorResponse> listAllCondutor() {
 		return condutorservice.listaDeCondutores();
 	}
 
@@ -30,7 +31,7 @@ public class CondutorController{
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Condutor buscaCondutorPorID(@PathParam("id") String id) throws Exception{
+	public CondutorResponse buscaCondutorPorID(@PathParam("id") String id) throws Exception{
 		return condutorservice.buscaContudorID(id);
 	}
 
