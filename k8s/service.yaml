@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: park-assist-service
+  namespace: staging
+  labels:
+    app: park-assist
+spec:
+  selector:
+    app: park-assist
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: NodePort
+  sessionAffinity: ClientIP
