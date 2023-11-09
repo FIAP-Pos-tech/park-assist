@@ -18,6 +18,7 @@ public class Veiculo {
     }
 
     public Veiculo() {}
+    
     public String getPlaca() {
         return placa;
     }

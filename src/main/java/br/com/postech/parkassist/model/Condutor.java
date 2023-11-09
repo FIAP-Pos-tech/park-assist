@@ -2,26 +2,31 @@ package br.com.postech.parkassist.model;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
-import org.bson.types.ObjectId;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+import org.bson.types.ObjectId;
 import java.util.List;
-import java.util.UUID;
+
 
 @MongoEntity(collection = "condutor")
 public class Condutor extends PanacheMongoEntity {
 
-    private UUID uuid;
+	@NotBlank(message = "O nome deve do condutor deve ser informado")
     private String nome;
+	@NotBlank(message = "A CNH deve ser informada")
     private String CNH;
+	@NotBlank(message = "A senha deve ser informada")
     private String senha;
+	@NotBlank(message = "O endereço deve ser informado")
     private String endereco;
+	@NotNull(message = "O tipo de pagamento deve ser informado")
     private TipoPagamento tipoPagamento;
     private List<Veiculo> veiculos;
 
 
-    public Condutor(String nome,UUID uuid, String CNH, String senha, String endereco, TipoPagamento tipoPagamento, List<Veiculo> veiculos) {
+    public Condutor(String nome, String CNH, String senha, String endereco, TipoPagamento tipoPagamento, List<Veiculo> veiculos) {
         this.nome = nome;
-        this.uuid = uuid;
         this.CNH = CNH;
         this.senha = senha;
         this.endereco = endereco;
@@ -29,7 +34,11 @@ public class Condutor extends PanacheMongoEntity {
         this.veiculos = veiculos;
     }
 
-     public Condutor() {}
+    public Condutor() {}
+
+    public ObjectId getId() {
+        return id;
+    }
 
     public void setId(ObjectId id) {
         this.id = id;
@@ -41,14 +50,6 @@ public class Condutor extends PanacheMongoEntity {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
     }
 
     public String getCNH() {
@@ -90,4 +91,6 @@ public class Condutor extends PanacheMongoEntity {
     public void setVeiculos(List<Veiculo> veiculos) {
         this.veiculos = veiculos;
     }
+
+	
 }
