@@ -1,59 +1,66 @@
 package br.com.postech.parkassist.controller;
 
+import br.com.postech.parkassist.controller.request.CondutorRequest;
 import br.com.postech.parkassist.controller.request.VeiculoRequest;
+import br.com.postech.parkassist.controller.response.CondutorResponse;
+import br.com.postech.parkassist.customexception.CustomException;
 import br.com.postech.parkassist.model.Condutor;
-import br.com.postech.parkassist.model.Veiculo;
+import br.com.postech.parkassist.service.CondutorService;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.bson.types.ObjectId;
-
 import java.util.List;
 
+
+
 @Path("/condutor")
-public class CondutorController {
+public class CondutorController{
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Condutor> listAllCondutor() {
-        return Condutor.listAll();
-    }
+	@Inject
+	CondutorService condutorservice;
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(Condutor condutor) {
-        condutor.persist();
-        return Response.ok().build();
-    }
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<CondutorResponse> listAllCondutor() {
+		return condutorservice.listaDeCondutores();
+	}
 
-    @PUT
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") String id, Condutor condutor) {
-        condutor.setId(new ObjectId(id));
-        condutor.update();
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
+	@GET
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public CondutorResponse buscaCondutorPorID(@PathParam("id") String id) throws Exception{
+		return condutorservice.buscaContudorID(id);
+	}
 
-    @DELETE
-    @Path("/{id}")
-    public Response delete(@PathParam("id") String id) {
-        Condutor.deleteById(new ObjectId(id));
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response create(@Valid  Condutor condutor) throws Exception{
+		condutorservice.create(condutor);
+		return Response.ok().build();
+	}
 
-    @POST//PATCH?
-    @Path("/{id}/adicionaVeiculo")
-    public Response addVeiculo(@PathParam("id") String id, VeiculoRequest veiculoRequest) {
-        Condutor condutor = Condutor.findById(new ObjectId(id));
-        List<Veiculo> veiculos = condutor.getVeiculos();
-        if(veiculos == null) {
-            veiculos = List.of(veiculoRequest.toEntity());
-        } else {
-            veiculos.add(veiculoRequest.toEntity());
-        }
-        condutor.setVeiculos(veiculos);
-        condutor.update();
-        return Response.ok().build();
-    }
+	@PUT
+	@Path("/{id}")
+	public Response update(@Valid @PathParam("id") String id, CondutorRequest condutorRequest) throws Exception{
+		condutorservice.update(id, condutorRequest);
+		return Response.ok().build();
+	}
+
+	@DELETE
+	@Path("/{id}")
+	public Response delete(@PathParam("id") String id) throws CustomException{
+		condutorservice.delete(id);
+		return Response.status(Response.Status.NO_CONTENT).build();
+	}
+
+	@POST//PATCH?
+	@Path("/{id}/adicionaVeiculo")
+	public Response addVeiculo(@PathParam("id") String id, VeiculoRequest veiculoRequest) throws CustomException{
+		condutorservice.criarVeiculo(id, veiculoRequest);
+		return Response.ok().build();
+	}
 }

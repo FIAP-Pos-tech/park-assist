@@ -2,24 +2,24 @@ package br.com.postech.parkassist.model;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import org.bson.types.ObjectId;
-
 import java.time.LocalDateTime;
-import java.util.UUID;
-
+import jakarta.validation.constraints.NotBlank;
 
 public class Estacionamento extends PanacheMongoEntity {
-    private UUID UUID;
+   
+	@NotBlank(message = "O ID do condutor deve ser informado")
     private ObjectId idCondutor;
+	@NotBlank(message = "Aplaca deve ser informado")
     private String placa;
-    private TipoCobranca tipoCobranca;
+	@NotBlank(message = "O tempo fixo deve ser informado")
     private Integer tempoFixo;
+    private TipoCobranca tipoCobranca;
     private LocalDateTime tempoDeInicio;
     private LocalDateTime tempoDeFim;
     private Recibo recibo;
 
 
-    public Estacionamento(UUID UUID, ObjectId idCondutor, String placa, TipoCobranca tipoCobranca, Integer tempoFixo, LocalDateTime tempoDeInicio, LocalDateTime tempoDeFim, Recibo recibo) {
-        this.UUID = UUID;
+    public Estacionamento(ObjectId idCondutor, String placa, TipoCobranca tipoCobranca, Integer tempoFixo, LocalDateTime tempoDeInicio, LocalDateTime tempoDeFim, Recibo recibo) {
         this.idCondutor = idCondutor;
         this.placa = placa;
         this.tipoCobranca = tipoCobranca;
@@ -33,14 +33,6 @@ public class Estacionamento extends PanacheMongoEntity {
 
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public java.util.UUID getUUID() {
-        return UUID;
-    }
-
-    public void setUUID(java.util.UUID UUID) {
-        this.UUID = UUID;
     }
 
     public ObjectId getIdCondutor() {
@@ -90,6 +82,14 @@ public class Estacionamento extends PanacheMongoEntity {
     public void setRecibo(Recibo recibo) {
         this.recibo = recibo;
     }
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
 
 
 }
