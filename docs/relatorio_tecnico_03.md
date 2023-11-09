@@ -120,5 +120,4 @@ Para nos auxiliar no projeto, configuramos o Github Actions de forma a realizar 
 
 ## Considerações Finais
 
-Neste projeto foi possível trabalhar com várias tecnologias interessantes como o *framework* Quarkus, o banco de dados noSQL MongoDB, a plataforma de nuvem GCP e o Kubernetes para orquestração de contêineres.
-
+Neste projeto foi possível trabalhar com várias tecnologias interessantes como o *framework* Quarkus, o banco de dados noSQL MongoDB, a plataforma de nuvem GCP e o Kubernetes para orquestração de contêineres. O uso de tais ferramentas também trouxe seus desafios. O Quarkus possui algumas sintaxes diferentes em relação ao Spring Boot que havia sido utilizado em trabalhos anteriores. A implantação da aplicação no Kubernetes também se mostrou desafiadora inicialmente. Nossas primeiras tentativas foram utilizando a plataforma AWS, mas encontramos barreiras na configuração de redes e dos próprio *clusters* do Kubernetes, o qual foram especialmente simples após a migração paa a plataforma GCP.
