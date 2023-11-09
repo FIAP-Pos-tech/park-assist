@@ -80,13 +80,25 @@ Já a camada controladora tem a função de lidar com as requisições recebidas
 
 Essa distribuição de responsabilidades assegura a manutenção de um código mais limpo e organizado, além de possibilitar um gerenciamento mais eficaz da complexidade na camada de serviço.
 
-<TODO Método realzarPagamento dummy mock criar interface contrato para garantir implementação correta>
-
 ## Escalabilidade e Nuvem
 
-Para prover um sistema escalável e capaz de responder às variações de demanda diárias e sazonais, optamos por utilizar o Kubernetes para orquestração de contâineres. Desta forma, à medida que a solicitação de recursos aumenta, o Kubernetes inicia novas instâncias da aplicação e balanceia as requisições entre elas.
+Para prover um sistema escalável e capaz de responder às variações de demanda diárias e sazonais, optamos por utilizar o Kubernetes para orquestração de contêineres. Desta forma, à medida que a solicitação de recursos aumenta ou diminui, o Kubernetes inicia ou destrói instâncias da aplicação e balanceia as requisições entre elas.
 
-Em conjunto com o Kubernetes, utilizamos o AWS Fargate, o qual é um serviço de computação *serverless* que facilita a execução de contâineres docker em um ambiente em Nuvem totalmente gerenciado pela AWS, de maneira que o AWS Fargate é capaz de gerenciar a escalabilidade e resposta do sistema às variações de demanda.
+Como plataforma de computação em nuvem, optamos pela utilização da Google Cloud Provider (GCP). Nesta plataforma foi possível fazer de forma simples a subida da imagem do container para o repositório, a criação do *cluster* no Kubernetes, o provisionamento dos recursos e a escalabilidade horizontal da aplicação mediante variações de cargas.
+
+<p align="center">Figura 5: Gráfico de consumo de recursos de CPU e Memória, note o descalonamento de recursos ao final da curva devido à redução de demanda.</p>
+
+![](imgs/escalabilidade.png)
+<p align="center">Fonte: Produção dos autores, 2023.</p>
+<br>
+
+Os arquivos de configuração do Kubernetes se encontram na pasta `k8s` no projeto, sendo compostos por:
+
+- deployment.yaml
+- lb.yaml
+- auto-scalling.yaml
+
+O primeiro é responsável pelo deploy da imagem no Kubernetes e provisionamento inicial da quantidade de instâncias e recursos mínimos necessário. O arquivo `lb` configura um balanceador de carga para encaminhar as requisições realizadas para as instâncias. Por fim, o último arquivo define os limites para o escalonamento horizontal da aplicação.
 
 ## Discussões
 
@@ -94,8 +106,19 @@ Em conjunto com o Kubernetes, utilizamos o AWS Fargate, o qual é um serviço de
 
 Uma vez que a preocupação central deste projeto é um serviço escalável, optamos pelo uso do *framework* Quarkus. Este é uma solução Java e Kubernetes nativa, projetado para ser leve e rápido em termos de recursos, características primordiais para aplicações em Nuvem. Além disso, o Quarkus nos permite fazer um deploy da aplicação compilada em código de máquina, o que nos desobriga do uso da JVM em nossos contêineres e propicia bons tempos de inicialização das imagens. Outra característica benéfica para o nosso projeto foi a presença do Panache embutido no *framework*, o que facilitou a integração com o banco de dados MongoDB.
 
+- Validação de Dados e Tratamento de Exceções
+
+Para validação dos dados de entradas das requisições utilizamos o Hibernate Validator. Com esta ferramenta conseguimos anotar as variáveis das classes de Entidade com restrições de conteúdo. Para customizar as exceções utilizamos o ExceptionMapper, este mapeia exceções em objetos de Resposta.
+
+- Método de Pagamento
+
+Uma vez que não integramos com um provedor de pagamentos, este processo está sendo simulado por uma classe "dummy" que retorna um valor aleatório, o qual é armazenado como número do recibo.
+
 - CI/CD
 
-Para nos auxiliar no projeto, configuramos o Github Actions de forma a realizar os ciclos de CI/CD. A configuração é realizada por um arquivo de extensão `.yml` o qual lista trabalhos e comandos a serem realizados durante o processo de *build*. Tal processo facilita a execução de testes da aplicação a cada merge para a branch principal.
+Para nos auxiliar no projeto, configuramos o Github Actions de forma a realizar os ciclos de CI/CD. A configuração é realizada por um arquivo de extensão `.yml` o qual lista trabalhos e comandos a serem realizados durante o processo de *build*. Tal processo facilita a subida da aplicação na plataforma de cloud.
 
 ## Considerações Finais
+
+Neste projeto foi possível trabalhar com várias tecnologias interessantes como o *framework* Quarkus, o banco de dados noSQL MongoDB, a plataforma de nuvem GCP e o Kubernetes para orquestração de contêineres.
+
