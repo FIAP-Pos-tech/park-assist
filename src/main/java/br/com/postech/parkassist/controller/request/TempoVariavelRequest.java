@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public record TempoVariavelRequest(String idCondutor, String placa) {
     public Estacionamento toEntity() {
-        return new Estacionamento(null, new ObjectId(this.idCondutor()), placa, TipoCobranca.TEMPO_VARIAVEL,
+        return new Estacionamento(new ObjectId(this.idCondutor()), placa, TipoCobranca.TEMPO_VARIAVEL,
                 null, LocalDateTime.now(), null, null);
     }
 
