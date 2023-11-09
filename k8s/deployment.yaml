@@ -10,6 +10,7 @@ metadata:
   name: park-assist
   namespace: staging
 spec:
+  replicas: 6
   selector:
     matchLabels:
       app: park-assist
@@ -21,13 +22,13 @@ spec:
       containers:
         - name: park-assist
 #          image: AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/park-assist:GITSHA
-          image: 585707473057.dkr.ecr.us-east-1.amazonaws.com/park-assist:82fbfd6b81877856b1e95f930ff276e8e01e508b
+          image: gcr.io/bright-gearbox-404600/parkassist:latest
           ports:
             - containerPort: 8080
           resources:
             limits:
-              cpu: 200m
-              memory: 512Mi
+              cpu: "1"
+              memory: 1024Mi
             requests:
-              cpu: 200m
-              memory: 512Mi
+              cpu: "0.25"
+              memory: 256Mi
