@@ -1,0 +1,73 @@
+name: "Deploy AWS"
+
+on:
+  push:
+    branches:
+      - deploy-aws
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+         
+      - name: Build with Maven
+        run: chmod +x mvnw && ./mvnw clean package -DskipTests
+
+      - name: Build Docker image
+        run: |
+          docker build -t park-assist:${{ github.sha }} .
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: |
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+      - name: Tag Docker Image
+        run: |
+          docker tag park-assist:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/park-assist:${{ github.sha }}
+
+      - name: Push Docker image to Amazon ECR
+        run: |
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/park-assist:${{ github.sha }}
+
+      - name: Install Kubectl
+        run: |
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
+
+      - name: Config Kubectl
+        run: |
+          aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name ${{ secrets.AWS_EKS_CLUSTER }}
+
+      - name: Replace Placeholders
+        run: |
+          sed -i -e "s/GITSHA/${{ github.sha }}/g" k8s/deployment.yaml \
+                 -e "s/AWS_ACCOUNT_ID/${{ secrets.AWS_ACCOUNT_ID }}/g" k8s/deployment.yaml \
+                 -e "s/AWS_REGION/${{ secrets.AWS_REGION }}/g" k8s/deployment.yaml
+          
+      - name: Deploy to K8s
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/lb.yaml
