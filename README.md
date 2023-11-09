@@ -1,61 +1,64 @@
 # parkassist
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+ParkAssist é um sistema de parquímetro digital para gerenciamento e cobrança de vagas de estacionamento rotativo. Tem por princípios fundamentais a utilização de tecnologias modernas e escaláveis para prover uma solução otimizada e eficiente, capaz de responder à variações de demanda diárias ou sazonais.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+Em desenvolvimento como trabalho de curso da pós-graduação em Arquitetura e Desenvolvimento Java na FIAP.
 
-## Running the application in dev mode
+Este projeto utiliza o *framework* Quarkus, para mais informações consulte: <https://quarkus.io/> .
 
-You can run your application in dev mode that enables live coding using:
+## Executado a aplicação em modo de desenvolvimento
+
+Para rodar a aplicação em modo de desenvlvimento (`dev`) com "live coding":
+
 ```shell script
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+> **_NOTA:_**  Quarkus tem uma interfac, disponível apenas mo modo dev em <http://localhost:8080/q/dev/>.
 
-## Packaging and running the application
+## Empacotando em JAR e executando a aplicação
 
-The application can be packaged using:
+O empacotamento da aplicação é feito executando o seguinte comando:
+
 ```shell script
 ./mvnw package
 ```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+O arquivo `quarkus-run.jar` é produzido na pasta `target/quarkus-app/` . As dependências são copiadas para a pasta `target/quarkus-app/lib/`.
 
-If you want to build an _über-jar_, execute the following command:
+
+Para rodar a aplicação pode se usar o seguinte comando:
+
+```shell script
+java -jar target/quarkus-app/quarkus-run.jar
+```
+
+Caso queira que seja gerado um _über-jar_, deve-se utilizar o seguinte comando:
+
 ```shell script
 ./mvnw package -Dquarkus.package.type=uber-jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+A aplicação empacotada como um _über-jar_ pode ser executada por: `java -jar target/*-runner.jar`.
 
-## Creating a native executable
+## Criando executáveis nativos e Contêineres
 
-You can create a native executable using: 
+O Quarkus permite a criação de executáveis nativos que não necessitam da JVM para rodar. Sendo assim, definimos um fluxo em `Dockerfile` para compilar e criar um container com a aplicação. Para isto basta executar o seguinte comando:
+
 ```shell script
-./mvnw package -Dnative
+docker build ./
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
+> **_NOTA:_**  Necessário ter o Docker e o Docker Composer instalados.
 
-You can then execute your native executable with: `./target/parkassist-1.0.0-SNAPSHOT-runner`
+## Deploy
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+Para prover escalabilidade horizontal, um container contendo a aplicação pode ser orquestrado com o Kubernetes. Para isto, definimos um fluxo de CI/CD com o Github Actions capaz de realizar o deploy da aplicação na plataforma GCP.
 
-## Related Guides
+## Guias Relacionados do Quarkus
 
 - MongoDB with Panache ([guide](https://quarkus.io/guides/mongodb-panache)): Simplify your persistence code for MongoDB via the active record or the repository pattern
+
 - RESTEasy Reactive ([guide](https://quarkus.io/guides/resteasy-reactive)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
 
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+- [Easily start your Reactive RESTful Web Services](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
