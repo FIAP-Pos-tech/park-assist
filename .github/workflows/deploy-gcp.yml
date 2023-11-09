@@ -42,6 +42,12 @@ jobs:
       - name: Configure Docker for GCR
         run: gcloud auth configure-docker
 
+      - uses: google-github-actions/get-gke-credentials@v0.2.0
+        with:
+          cluster_name: ${{ secrets.GKE_CLUSTER }}
+          location: ${{ secrets.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SA_KEY }}
+
       - name: Build Docker image
         run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/park-assist:${{ github.sha }} .
 
@@ -52,10 +58,6 @@ jobs:
         run: |
           sudo apt-get install kubectl
 
-      - name: Get GKE credentials
-        run: |
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
-
       - name: Replace Placeholders
         run: |
           sed -i -e "s/GITSHA/${{ github.sha }}/g" k8s/deployment.yaml \
@@ -65,4 +67,4 @@ jobs:
       - name: Deploy to GKE
         run: |
           kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/lb.yaml
