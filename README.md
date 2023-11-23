@@ -2,7 +2,7 @@
 
 ParkAssist é um sistema de parquímetro digital para gerenciamento e cobrança de vagas de estacionamento rotativo. Tem por princípios fundamentais a utilização de tecnologias modernas e escaláveis para prover uma solução otimizada e eficiente, capaz de responder à variações de demanda diárias ou sazonais.
 
-Em desenvolvimento como trabalho de curso da pós-graduação em Arquitetura e Desenvolvimento Java na FIAP.
+Em desenvolvimento como trabalho de curso da pós-graduação em Arquitetura e Desenvolvimento Java na FIAP. No seguinte endereço os endpoints da aplicação estão disponíveis para avaliação: 34.151.222.134:8080
 
 Este projeto utiliza o *framework* Quarkus, para mais informações consulte: <https://quarkus.io/> .
 
